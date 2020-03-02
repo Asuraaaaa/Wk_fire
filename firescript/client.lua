@@ -2,6 +2,21 @@ fireremover = {}
 fireremoverParticles = {}
 streetnames = {}
 
+-------------------------------------------------------------------------------------------------------------------------
+-----------------------THANKS TO SPIKE IN FIVE.NET FORUMS https://forum.cfx.re/t/check-if-player-is-online/1040397/7-----
+-----------------------MADE ESX COMPATIBLE AND FIX THE EVENT-------------------------------------------------------------
+ESX = nil
+Citizen.CreateThread(function()
+	while ESX == nil do
+		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+		Citizen.Wait(0)
+	end
+	while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(100)
+	end
+	PlayerData = ESX.GetPlayerData()
+end)
+
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -37,10 +52,7 @@ local fireHornLocation = {
   { x = -1030.88, y = -2374.77, z = 20.61, name = "Los Santos Airport Fire Station"},
   { x = -1189.27, y = -1784.38, z = 15.62, name = "Vespucci Beach LifeGuard Station"},
 }
-local FireModels = {
-	[GetHashKey("S_M_Y_Fireman_01")] = true,
-	[GetHashKey("s_f_y_paramedic_01")] = true,
-}
+
 local msg = function(text,ms)
 	exports.pNotify:SendNotification({text = text,type = "error",timeout = (ms or 9000),layout = "centerLeft",queue = "right"})
 end
@@ -108,9 +120,13 @@ end
 RegisterNetEvent("WK:askfireman")
 RegisterNetEvent("WK:random")
 AddEventHandler("WK:askfireman",function()
-	if FireModels[GetEntityModel(GetPlayerPed(-1))] then
-		TriggerServerEvent("WK:askfireman")
-	end
+		
+		--------- CHECK IF THERE IS A PLAYER WITH THE JOB FIRE--------
+	  if PlayerData ~= nil then
+        if PlayerData.job.name == 'fire' then
+            TriggerServerEvent('WK:amfireman') --FIXED THE EVENT
+        end
+    end   
 end)
 AddEventHandler("WK:random",function()
 	local possibleLocations = #randomFireLocations
