@@ -2,8 +2,6 @@
 
 FiveM Firescript for ESX
 
-Remember to add "FireModels" line 40 in client
-
 these addons are supported with [inferno collection]
 
 see line 174 in client
