@@ -2,9 +2,6 @@ fireremover = {}
 fireremoverParticles = {}
 streetnames = {}
 
--------------------------------------------------------------------------------------------------------------------------
------------------------THANKS TO SPIKE IN FIVE.NET FORUMS https://forum.cfx.re/t/check-if-player-is-online/1040397/7-----
------------------------MADE ESX COMPATIBLE AND FIX THE EVENT-------------------------------------------------------------
 ESX = nil
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -100,34 +97,30 @@ AddEventHandler("triggerSound", function()
 end)
 
 local reportFire = function(x,y,z)
-	--msg(string.format("FIRE AT %.2f, %.2f, %.2f.",x,y,z),3000)
+	--- FOR gcphone function
 	--xpcall(function()
 		local s1, s2 = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, x, y, z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
 		TriggerServerEvent("WK:firePos", x, y, z)
-		--msg("Yes it fucking triggered, just to be sure.")
 		if s2 == 0 then
-			IconNotif("CHAR_CALL911", 4, "Rapporter til stationen", "Vi har identificeret en brand!")
-			--IconNotif("CHAR_CALL911", 4, "Reports to the station", "We have identified a fire!")
+			IconNotif("CHAR_CALL911", 4, "Reports to the station", "We have identified a fire!")
 		else
-			IconNotif("CHAR_CALL911", 4, "Rapporter til stationen", "Vi har identificeret en brand!")
-			--IconNotif("CHAR_CALL911", 4, "Reports to the station", "We have identified a fire!")
-			
+			IconNotif("CHAR_CALL911", 4, "Reports to the station", "We have identified a fire!")
 		end
-    --end,function(m)
-	--	msg(debug.traceback("FAILURE: "..tostring(m).."."))
-	--end)
 end
+--------- CHECK IF THERE IS A PLAYER WITH THE JOB FIRE--------
+-------------------------------------------------------------
 RegisterNetEvent("WK:askfireman")
 RegisterNetEvent("WK:random")
 AddEventHandler("WK:askfireman",function()
 		
-		--------- CHECK IF THERE IS A PLAYER WITH THE JOB FIRE--------
 	  if PlayerData ~= nil then
         if PlayerData.job.name == 'fire' then
-            TriggerServerEvent('WK:amfireman') --FIXED THE EVENT
+            TriggerServerEvent('WK:amfireman')
         end
     end   
 end)
+---------------IT FOR RANDOM FIRE DIDN'T CHANGE IT-----
+--------------------------------------------------------
 AddEventHandler("WK:random",function()
 	local possibleLocations = #randomFireLocations
 	if possibleLocations == 0 then
@@ -300,6 +293,7 @@ AddEventHandler("WK:firestop", function()
 		fireremoverParticles = {}
 		fireremover = {}
 end)
+
 RegisterNetEvent("WK:fireremovesync")
 AddEventHandler("WK:fireremovesync", function( firec, lastamnt, deletedfires, original )
 		
@@ -339,23 +333,6 @@ AddEventHandler("WK:firesyncs2", function( firec, lastamnt, deletedfires, origin
 			end
 				TriggerServerEvent("WK:firesyncs60")
 end)
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
------------------------------------------------------------------ just a debug function ------------------------------------------------------------------
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-RegisterNetEvent("WK:test2")
-AddEventHandler("WK:test2", function( test )
-		TriggerEvent("chatMessage", "FIRE", {255, 0, 0},"test string: " .. tostring(test))
-end)
-function firehelper(fireremover)
-for i=1,#fireremover do
-		     PlaceObjectOnGroundProperly(fireremover[i])
-		end
-
-end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -558,69 +535,6 @@ AddEventHandler("WK:fireremovess", function( x, y, z, test )
 		
 end)
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
---------------------------------------------------------- Thread to handle spawning initial fire ---------------------------------------------------------
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
---[[
-Citizen.CreateThread(function() 
-	while true do 
-		Citizen.Wait(0)
-		if IsControlJustPressed(1, 28) then -- button f7
-			FSData.originalfiremaker = tostring(GetPlayerPed(-1))
-				
-			local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-			local coords = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-                                          
-                
-			if not HasNamedPtfxAssetLoaded("core") then
-				RequestNamedPtfxAsset("core")
-				while not HasNamedPtfxAssetLoaded("core") do
-					Wait(1)
-				end
-			end
-			SetPtfxAssetNextCall("core")
-			
-			
-		
-			table.insert(FSData.lastamnt, 20)
-		
-           	local rand = math.random(1, 200)
-			if rand > 100 then
-				table.insert(FSData.lastamnt, StartParticleFxLoopedAtCoord("ent_ray_heli_aprtmnt_l_fire", x+5, y, z-0.7, 0.0, 0.0, 0.0, 1.0, false, false, false, false))
-			else
-				table.insert(FSData.lastamnt, StartParticleFxLoopedAtCoord("ent_ray_heli_aprtmnt_h_fire", x+5, y, z-0.7, 0.0, 0.0, 0.0, 1.0, false, false, false, false))
-			end
-			table.insert(FSData.lastamnt, x+5)
-      		table.insert(FSData.lastamnt, y)
-           	table.insert(FSData.lastamnt, z-0.7)
-		
-           	table.insert(fireremover, StartScriptFire (x+5, y, z-0.8, 25, false))
-           	table.insert(fireremover, x+5)
-           	table.insert(fireremover, y)
-           	table.insert(fireremover, z-0.8)
-			local firec = {}
-			local lastamnt = {}
-			local deletedfires = {}
-			for i=1,#FSData.firecoords do
-				firec[i] = FSData.firecoords[i]
-			end
-			for i=1,#FSData.lastamnt do
-				lastamnt[i] = FSData.lastamnt[i]
-			end
-			for i=1,#FSData.deletedfires do
-				deletedfires[i] = FSData.deletedfires[i]
-			end
-			local original = tostring(FSData.originalfiremaker)
-			if chatStreetAlerts == true then
-            	chatAlerts(x, y, z)
-        	end
-			TriggerServerEvent("WK:firesyncs", firec, lastamnt, deletedfires, original)
-			Citizen.Wait(2000)
-		end
-	end 
-end)]]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
