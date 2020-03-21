@@ -15,6 +15,8 @@ har også emergency vehicles: https://github.com/Wick89/emergency-Vehicles
 
 start esx_Firescript 
 
+start saw
+
 start inferno-fire-alarm
 
 start inferno-fire-ems-pager
@@ -44,6 +46,8 @@ also have emergency vehicles: https://github.com/Wick89/emergency-Vehicles
 
 
 start esx_Firescript
+
+start saw are in danish
 
 start inferno-fire-alarm are in danish
 
