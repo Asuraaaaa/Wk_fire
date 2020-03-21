@@ -36,7 +36,8 @@ AddEventHandler("chatMessage", function(p, color, msg)
         cmd = fullcmd[1]
 		
         if cmd == "/firestop" then
-			TriggerClientEvent("chatMessage", p, "FIRE ", {255, 0, 0}, "You stopped all the fires!")
+			--TriggerClientEvent("chatMessage", p, "FIRE ", {255, 0, 0}, "You stopped all the fires!")
+			TriggerClientEvent("chatMessage", p, "FIRE ", {255, 0, 0}, "Du stoppede alle brande!")
         	TriggerClientEvent("WK:firestop", p)
 			TriggerClientEvent("WK:firesync", -1)
         	CancelEvent()
@@ -79,7 +80,7 @@ RegisterServerEvent("WK:amfireman")
 local spawnRandomFires = true -- set to true and put x,y,z locations and amount of time before their is a chance of a fire spawning
 local spawnRandomFireChance = 750 -- basically a thousand sided dice is rolled and if it gets above this number then a fire spawns at one of the locations specified
 local spawnRandomFireAlways = true -- for debugging, overrides the chance.
-local randomSpawnTime = 900000 -- time to wait before trying ot spawn another random fire in milliseconds 1,200,000 is 20 minutes.
+local randomSpawnTime = 1200000 -- time to wait before trying ot spawn another random fire in milliseconds 1,200,000 is 20 minutes.
 local randomResponseTime = 1000 -- time to wait for response from clients if they're a fireman.
 local function randomFireAttempt()
 	if not spawnRandomFires then

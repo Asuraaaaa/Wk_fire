@@ -11,7 +11,6 @@ server_scripts {
 client_scripts {
 	"client.lua",
 	"vars/variables.lua",
-	"firehose.lua",
 }
 
 -- Export function
